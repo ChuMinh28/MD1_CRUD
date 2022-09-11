@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CRUD2</title>
+    <style>
+        table{
+            text-align: center;
+        }
+        input{
+            width: 300px;
+        }
+        button{
+            border-radius: 10%;
+        }
+    </style>
+</head>
+<body>
+<h1 style="text-align: center">===============FAN CLUB MANAGER=================</h1>
+<label id="validate"></label><br>
+<input id="newOne" type="text" onclick="reset()" placeholder="Enter you name">
+<button onclick="createMember()">Create</button>
+<input id="search" type="text" onclick="reset()" placeholder="Search for someone" oninput="searchMember()">
+<button onclick="searchMember()">Search</button>
+<h2 id="result"></h2>
+<table border="1" style="width: 100%">
+    <tr>
+        <th>STT</th>
+        <th>NAME</th>
+        <th>EDIT</th>
+        <th>DELETE</th>
+    </tr>
+    <tbody id="drawTable"></tbody>
+</table>
+<script>
+    let memberList = ['Messi', 'Ronaldo', 'Tony', 'Thor']
+
+    function showMemberList() {
+        let drawTable = ''
+        for (let i = 0; i < memberList.length; i++) {
+            drawTable += `<tr>
+<td>${i + 1}</td>
+<td>${memberList[i]}</td>
+<td><button onclick="updateMember(${i})">Edit</button></td>
+<td><button onclick="deleteMember(${i})">Delete</button></td>
+
+</tr>`
+        }
+        document.getElementById('drawTable').innerHTML = drawTable
+    }
+
+    showMemberList()
+
+    function createMember() {
+        let newMember = document.getElementById('newOne').value
+        if (newMember.trim() === '') {
+            document.getElementById('validate').innerHTML = '<label style="color: red"> <strong>The name is required! Please try again</strong>'
+        } else {
+            memberList.push(newMember)
+            document.getElementById('result').innerHTML = '<label style="color: aqua" <strong>Create success</strong>'
+            showMemberList()
+        }
+    }
+
+    function updateMember(id) {
+        let updateMember = prompt('Enter the new name to update: ', 'Old name: ' + memberList[id])
+        if (updateMember.trim() === '') {
+            document.getElementById('validate').innerHTML = '<label style="color: red"> <strong>The name is required! Please try again</strong>'
+        } else {
+            if (updateMember === memberList[id]) {
+                document.getElementById('validate').innerHTML = '<label style="color: red"> <strong>The name is required! Please try again</strong>'
+            } else {
+                memberList[id] = updateMember
+                document.getElementById('result').innerHTML = '<label style="color: aqua" <strong>Create success</strong>'
+                showMemberList()
+            }
+        }
+    }
+
+    function deleteMember(id) {
+        if (confirm('Are you sure to delete Member')) {
+            memberList.splice(id, 1)
+            document.getElementById('result').innerHTML = '<label style="color: aqua" <strong>Delete Success</strong>'
+            showMemberList()
+        } else {
+            document.getElementById('validate').innerHTML = '<label style="color: red"> <strong>KHONG XOA THI THOI</strong>'
+        }
+    }
+
+    let listMemberSearch = []
+    function searchMember() {
+        listMemberSearch = []
+        let search = document.getElementById('search').value;
+        if (search.trim() === '') {
+            showMemberList()
+            return
+        } else {
+            for (let i = 0; i < memberList.length; i++) {
+                if (memberList[i].search(search) !== -1) {
+                    listMemberSearch.push(memberList[i])
+                }
+            }
+        }
+        showMemberSearch()
+    }
+
+    function showMemberSearch() {
+        let drawTable = ''
+        for(let i= 0;i<listMemberSearch.length;i++){
+            drawTable += `<tr>
+<td>${i+1}</td>
+<td>${listMemberSearch[i]}</td>
+<td><button onclick="updateMember(${i})">Edit</button></td>
+<td><button onclick="deleteMember(${i})">Delete</button></td>
+</tr>`
+        }
+        document.getElementById('drawTable').innerHTML = drawTable
+    }
+    function reset() {
+        document.getElementById('result').innerHTML = ''
+        document.getElementById('validate').innerHTML = ''
+    }
+</script>
+</body>
+</html>
